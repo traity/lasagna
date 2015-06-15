@@ -1,0 +1,6 @@
+module.exports                 = require('./lib/errors')
+module.exports.Model           = require('./lib/model')
+module.exports.MongoRepository = require('./lib/mongo_repository')
+module.exports.App             = require('./lib/app')
+module.exports.errorBuilder    = require('./lib/error_builder')
+module.exports.sharedSpec      = require('./lib/shared_spec')

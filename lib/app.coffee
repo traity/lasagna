@@ -59,7 +59,7 @@ module.exports = class App
     res.status(err.status || 500).json(error: _.pick(err, 'name', 'message'))
 
   _onOutput: (output, res) ->
-    if output._redirect?
+    if output?._redirect?
       res.redirect(output._redirect)
     else
       res.json(output || {})

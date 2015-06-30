@@ -28,16 +28,16 @@ module.exports = class MongoRepository
   clear: ->
     @_deleteAllBy({})
 
-  _findOneBy: (args) ->
-    @_findAllBy(args).then (items) =>
+  _findOneBy: (args...) ->
+    @_findAllBy(args...).then (items) =>
       throw new NotFoundError("#{@_model.name} not found") if !items[0]?
       items[0]
 
-  _findAllBy: (args) ->
-    @_items.find(args).toArray().then (items) => @_buildItems(items)
+  _findAllBy: (args...) ->
+    @_items.find(args...).toArray().then (items) => @_buildItems(items)
 
-  _deleteAllBy: (args) ->
-    @_items.remove(args)
+  _deleteAllBy: (args...) ->
+    @_items.remove(args...)
 
   _buildItems: (items) ->
     for item in items

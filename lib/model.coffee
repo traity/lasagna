@@ -8,7 +8,7 @@ module.exports = class Model
 
   constructor: (args) ->
     for k,v of args
-      @[k] = v
+      @[k] = v if v?
       @_attributeError(k) unless k in @constructor._attributes
 
   _createId: ->

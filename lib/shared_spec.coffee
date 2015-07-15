@@ -31,13 +31,13 @@ module.exports =
       it 'deletes an item', ->
         @repository.delete(buildItem().id).then =>
           @repository.findOneById buildItem().id
-        .fail (err) ->
-          assert(err instanceof NotFoundError)
+        .then -> throw new Error('An error should have been thrown')
+        .catch (err) -> assert(err instanceof NotFoundError)
 
       it 'throws an error when finding a non-existing item', ->
         @repository.findOneById "#{buildItem().id}-something-else"
-        .fail (err) =>
-          assert(err instanceof NotFoundError)
+        .then -> throw new Error('An error should have been thrown')
+        .catch (err) -> assert(err instanceof NotFoundError)
 
   behavesLikeATimestampedRepository: (buildItem) ->
     describe 'timestamped repository', ->

@@ -1,8 +1,9 @@
 _ = require('underscore')
 crypto = require('crypto')
 {NotFoundError} = require('./errors')
+Repository = require('./repository')
 
-module.exports = class MongoRepository
+module.exports = class MongoRepository extends Repository
   @model: (model) -> @_model = model
   @timestamps: (timestamps) -> @_timestamps = timestamps
 

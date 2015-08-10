@@ -53,7 +53,6 @@ module.exports = class App
     .catch (err) => @_onError(err, res)
 
   _callMiddlewares: (req, res, metadata, next) ->
-    req.metadata = metadata || {}
     actions = for middleware in @_middlewares
       do (middleware) ->
         (cb) ->

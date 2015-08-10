@@ -25,34 +25,40 @@ module.exports = class App
     @_app.use(bearerToken())
     @_app.use(multiparty())
     @_app.use (err, req, res, next) => @_onError(err, res)
-    for [method, path, service, func, metadata] in api
-      do (service, func, metadata) =>
+    for [method, path, service, action, metadata] in api
+      do (service, action, metadata) =>
         @_app[method] path, (req, res) =>
-          @_safeApiCall(@_factory[service], func, metadata, req, res)
+          @_addMetadata(req, service, action, metadata)
+          @_safeApiCall(@_factory[service], action, metadata, req, res)
 
-  _safeApiCall: (service, func, metadata, req, res) ->
+  _addMetadata: (req, service, action, metadata) ->
+    req.metadata = metadata || {}
+    req.metadata.service = service
+    req.metadata.action = action
+
+  _safeApiCall: (service, action, metadata, req, res) ->
     d = domain.create()
     d.on('error', (err) => @_onError(err, res))
     d.add(res)
     d.run => process.nextTick =>
       @_callMiddlewares req, res, metadata, (err) =>
         return @_onError(err, res) if err?
-        @_apiCall(service, func, req, res)
+        @_apiCall(service, action, req, res)
 
-  _apiCall: (service, func, req, res) ->
+  _apiCall: (service, action, req, res) ->
     params = _.defaults(req.files || {}, req.params, req.query, req.body)
-    result = service[func].call(service, params)
+    result = service[action].call(service, params)
     Promise.resolve(result)
     .then (output) => @_onOutput(output, res)
     .catch (err) => @_onError(err, res)
 
   _callMiddlewares: (req, res, metadata, next) ->
     req.metadata = metadata || {}
-    funcs = for middleware in @_middlewares
+    actions = for middleware in @_middlewares
       do (middleware) ->
         (cb) ->
           middleware(req, res, cb)
-    async.series(funcs, next)
+    async.series(actions, next)
 
   _onError: (err, res) ->
     console.error err.stack

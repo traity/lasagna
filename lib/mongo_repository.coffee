@@ -20,8 +20,8 @@ module.exports = class MongoRepository extends Repository
     @_items.update({_id: item._id}, item, {upsert: true}).then =>
       @_deserialize(item)
 
-  count: ->
-    @_items.find().count()
+  count: (args...) ->
+    @_items.find(args...).count()
 
   delete: (id) ->
     @_deleteAllBy(_id: id)

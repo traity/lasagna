@@ -1,6 +1,6 @@
 {
   "name": "lasagna",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Layered framework for building JSON APIs easily",
   "main": "lasagna.coffee",
   "author": "Traity",

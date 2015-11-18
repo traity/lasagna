@@ -20,8 +20,8 @@ module.exports = class MongoRepository extends Repository
     @_items.update({_id: item._id}, item, {upsert: true}).then =>
       @_deserialize(item)
 
-  count: (args...) ->
-    @_items.find(args...).count()
+  count: ->
+    @_countBy()
 
   delete: (id) ->
     @_deleteAllBy(_id: id)
@@ -39,6 +39,9 @@ module.exports = class MongoRepository extends Repository
 
   _deleteAllBy: (args...) ->
     @_items.remove(args...)
+
+  _countBy: (args...) ->
+    @_items.find(args...).count()
 
   _buildItems: (items) ->
     for item in items
